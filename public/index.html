@@ -98,5 +98,43 @@
  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="/src/js/app.js"></script>
 <script src="/src/js/feed.js"></script>
+
+<script>                                                            //manifest scrpt 
+  // Check that service workers are supported
+  if ('serviceWorker' in navigator) {
+  // Use the window load event to keep the page load performant
+  window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+  });
+  }
+</script>
+<button id="install" style="display:none;" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+  Installieren
+</button>
+<script>
+  const installButton = document.getElementById('install');
+  console.log('installButton', installButton)
+  let deferredPrompt;
+
+  window.addEventListener('beforeinstallprompt', evt => {
+    console.log(evt.platforms); // e.g., ["web", "android", "windows"]
+    evt.preventDefault();
+    deferredPrompt = evt;
+    installButton.style.display = 'block';
+  })
+
+  installButton.addEventListener('click', async () => {
+    await deferredPrompt.prompt();
+    const choiceResult = await deferredPrompt.userChoice;
+    console.log(choiceResult.outcome);
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installButton.style.display = 'none';
+  })
+
+</script>
+
+
 </body>
 </html>
