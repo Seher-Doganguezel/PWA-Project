@@ -6,6 +6,7 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>IKT-PWA</title>
+  <link href="/dist/output.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -13,8 +14,25 @@
         href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css">
   <link rel="stylesheet" href="/src/css/app.css">
   <link rel="stylesheet" href="/src/css/feed.css">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+
+  <h1 class="text-xl font-bold underline">
+    Hello world!
+  </h1>
+  <mat-slide-toggle>Toggle me!</mat-slide-toggle>
+
+    <script>
+    navigator.serviceWorker.register("/serviceworker.js").then(registration => {
+      console.log("success!");
+      if (registration.installing) {
+        registration.installing.postMessage("Howdy from your installing page.");
+      }
+    }, err => {
+      console.error("Installing the worker failed!", err);
+    });
+    </script>
 
 <div id="app">
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -131,10 +149,45 @@
 
   window.addEventListener('appinstalled', () => {
     installButton.style.display = 'none';
+    
+    console.log('Die Anwendung wurde installiert.');
   })
 
 </script>
+<!--
+<script>
+                                                                  // Servive worker scprt
+    if ('serviceWorker' in navigator) {
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker.register('./sw.js').then(function(registration) {
+            console.log('Service worker registration succeeded:', registration);
+            console.log('Scope ist ' + registration.scope);
+            // At this point, you can optionally do something
+            // with registration. See https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
+        }).catch(function(error) {
+            console.log('Service worker registration failed:', error);
+        });
 
+        // Independent of the registration, let's also display
+        // information about whether the current page is controlled
+        // by an existing service worker, and when that
+        // controller changes.
 
+        // First, do a one-off check if there's currently a
+        // service worker in control.
+        if (navigator.serviceWorker.controller) {
+            console.log('This page is currently controlled by:', navigator.serviceWorker.controller);
+        }
+
+        // Then, register a handler to detect when a new or
+        // updated service worker takes control.
+        navigator.serviceWorker.oncontrollerchange = function() {
+            console.log('This page is now controlled by:', navigator.serviceWorker.controller);
+        };
+    } else {
+        console.log('Service workers are not supported.');
+    }
+</script>-->
 </body>
 </html>
