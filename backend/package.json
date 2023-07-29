@@ -1,18 +1,19 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend REST-API",
   "main": "server.js",
   "scripts": {
     "watch": "nodemon ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "S.Doganguezel",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongodb": "^5.6.0"
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

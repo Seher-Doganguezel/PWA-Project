@@ -1,3 +1,6 @@
+const CURRENT_STATIC_CACHE = 'static-v2';
+const CURRENT_DYNAMIC_CACHE = 'dynamic-v2';
+
 self.addEventListener('install', event => {
     console.log('service worker --> installing ...', event);
     event.waitUntil(
@@ -26,11 +29,26 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
     console.log('service worker --> activating ...', event);
+    event.waitUntil(
+        caches.keys()
+            .then( keyList => {
+                return Promise.all(keyList.map( key => {
+                    if(key !== CURRENT_STATIC_CACHE && key !== CURRENT_DYNAMIC_CACHE) {
+                        console.log('service worker --> old cache removed :', key);
+                        return caches.delete(key);
+                    }
+                }))
+            })
+    );
     return self.clients.claim();
 })
 
 
+
 self.addEventListener('fetch', event => {
+
+    if (!(event.request.url.indexOf('http') === 0)) return;
+
     event.respondWith(
         caches.match(event.request)
             .then( response => {

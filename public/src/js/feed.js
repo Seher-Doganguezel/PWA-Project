@@ -2,6 +2,9 @@ let shareImageButton = document.querySelector('#share-image-button');
 let createPostArea = document.querySelector('#create-post');
 let closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 let sharedMomentsArea = document.querySelector('#shared-moments');
+let imagePicker = document.querySelector('#image-picker');
+let imagePickerArea = document.querySelector('#pick-image');
+let imageURI = '';
 
 function openCreatePostModal() {
   createPostArea.style.display = 'block';
