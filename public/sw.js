@@ -1,30 +1,35 @@
-const CURRENT_STATIC_CACHE = 'static-v2';
-const CURRENT_DYNAMIC_CACHE = 'dynamic-v2';
+importScripts('/src/js/idb.js');
+importScripts('/src/js/db.js');
+
+const CACHE_VERSION = 3;
+const CURRENT_STATIC_CACHE = 'static-v'+CACHE_VERSION;
+const CURRENT_DYNAMIC_CACHE = 'dynamic-v'+CACHE_VERSION;
+const STATIC_FILES = [
+    '/',
+    '/index.html',
+    '/src/js/app.js',
+    '/src/js/feed.js',
+    '/src/js/material.min.js',
+    '/src/js/idb.js',
+    '/src/css/app.css',
+    '/src/css/feed.css',
+    '/src/images/htw.jpg',
+    'https://fonts.googleapis.com/css?family=Roboto:400,700',
+    'https://fonts.googleapis.com/icon?family=Material+Icons',
+    'https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css'
+
+];
 
 self.addEventListener('install', event => {
     console.log('service worker --> installing ...', event);
     event.waitUntil(
-        caches.open('static')
-            .then( cache => {
-                console.log('Service-Worker-Cache erzeugt und offen'); 
-                cache.addAll([
-                    '/',
-                    '/index.html',
-                    '/src/js/app.js',
-                    '/src/js/feed.js',
-                    '/src/js/material.min.js',
-                    '/src/css/app.css',
-                    '/src/css/feed.css',
-                    '/src/images/htw.jpg',
-                    'https://fonts.googleapis.com/css?family=Roboto:400,700',
-                    'https://fonts.googleapis.com/icon?family=Material+Icons',
-                    'https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css'
-                ]);
-            })
+        caches.open(CURRENT_STATIC_CACHE)
+        .then(cache => {
+            console.log('Service-Worker-Cache erzeugt und offen');
+            cache.addAll(STATIC_FILES);
+        })
     );
 })
-
-
 
 
 self.addEventListener('activate', event => {
@@ -46,9 +51,34 @@ self.addEventListener('activate', event => {
 
 
 self.addEventListener('fetch', event => {
+    // check if request is made by chrome extensions or web page
+    // if request is made for web page url must contains http.
+    if (!(event.request.url.indexOf('http') === 0)) return; // skip the request. if request is not made with http protocol
 
-    if (!(event.request.url.indexOf('http') === 0)) return;
+    const url = 'http://localhost:8000/posts';
+    if(event.request.url.indexOf(url) >= 0) {
+        event.respondWith(
+            fetch(event.request)
+            .then ( res => {
+                const clonedResponse = res.clone();
+                clearAllData('posts')
+                .then( () => {
+                    return clonedResponse.json();
+                })
+                .then( data => {
+                    for(let key in data)
+                    {
+                        console.log('writwe data', data[key]);
+                        writeData('posts', data[key]);
+                    }
+                });
+                return res;
+            })
+        )
+    } else {
 
+    
+   //-------------------
     event.respondWith(
         caches.match(event.request)
             .then( response => {
@@ -57,7 +87,7 @@ self.addEventListener('fetch', event => {
                 } else {
                     return fetch(event.request)
                         .then( res => {     
-                            return caches.open('dynamic')      // dynamiv+c
+                            return caches.open(CURRENT_DYNAMIC_CACHE)      // dynamiv+c
                                 .then( cache => {
                                     cache.put(event.request.url, res.clone());
                                     return res;
@@ -65,5 +95,12 @@ self.addEventListener('fetch', event => {
                         });
                 }
             })
-    );
+    )}
 })
+
+
+
+
+
+
+
