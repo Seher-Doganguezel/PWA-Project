@@ -2,40 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
+    <meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>IKT-PWA</title>
-    <!--dist/output.css
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet"href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css"> 
-
--->
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <link rel="stylesheet" href="/src/css/app.css" />
     <link rel="stylesheet" href="/src/css/feed.css" />
     <link rel="manifest" href="/manifest.json" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <link
-      rel="stylesheet"
-      href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css"
-    />
+    <link rel="stylesheet"href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css"/>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   </head>
   <body>
-    <h1>887</h1>
+
+    <h1>4</h1>
 
     <div id="app">
       <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -50,12 +32,14 @@
               <a class="mdl-navigation__link" href="/">Bilder</a>
               <a class="mdl-navigation__link" href="/help">Hilfe</a>
               <div class="drawer-option">
-                <button
-                  class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-                >
+                <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent">
                   Benachrichtigungen Ein
                 </button>
               </div>
+              <div class="drawer-option"> <!-- Button für die Installation der App -->
+                <button id="install1" style="display:none;" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent installButton">
+                  Installieren
+                </button>
             </nav>
           </div>
         </header>
@@ -65,89 +49,120 @@
             <a class="mdl-navigation__link" href="/">Bilder</a>
             <a class="mdl-navigation__link" href="/help">Hilfe</a>
             <div class="drawer-option">
-              <button
-                class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-              >
+              <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent">
                 Benachrichtigungen Ein
+              </button>
+            </div>
+            <div class="drawer-option"> <!-- Button für die Installation der App -->
+              <button id="install2" style="display:none;" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent installButton">
+                Installieren
               </button>
             </div>
           </nav>
         </div>
         <main class="mdl-layout__content mat-typography">
-          <div id="create-post">
+
             <form>
-              <div
-                class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
-              >
+              <div id="create-post"></div>
+
+              <video id="player" autoplay></video>
+              <canvas id="canvas" width="320px" height="240px"></canvas>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="capture-btn">Foto</button>
+              <div id="pick-image">
+                  <h6>Bild auswählen</h6>
+                  <input type="file" accept="image/*" id="image-picker">
+              </div>
+
+              <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" id="title" />
-                <label class="mdl-textfield__label" for="title" name="title"
-                  >Titel</label
-                >
+                <label class="mdl-textfield__label" for="title" name="title">Titel</label>
               </div>
+
               <div
                 class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
-                id="manual-location"
-              >
+                id="manual-location">
                 <input class="mdl-textfield__input" type="text" id="location" />
-                <label
-                  class="mdl-textfield__label"
-                  for="location"
-                  name="location"
-                  >Ort</label
-                >
+                <label class="mdl-textfield__label" for="location"
+                  name="location">Ort</label>
               </div>
-              <br />
+
+            <br>
               <div>
-                <button
-                  class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-                  type="submit"
-                  id="post-btn"
-                >
-                  Speichern
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
+                  type="submit" id="post-btn"> Speichern
                 </button>
               </div>
-              <br />
+            <br>
+
               <div>
-                <button
-                  class="mdl-button mdl-js-button mdl-button--fab"
-                  id="close-create-post-modal-btn"
-                  type="button"
-                >
+                <button class="mdl-button mdl-js-button mdl-button--fab" id="close-create-post-modal-btn"
+                  type="button">
                   <i class="material-icons">close</i>
                 </button>
               </div>
-            </form>
           </div>
-          <!--<img src="/src/images/htw.jpg"
-           alt="HTW Wilhelminenhof"
-           class="main-image"> -->
+        </form>
+
+           
+        <div id="hero">
+          <h1>Test insta</h1>
+        </div>
+
           <div class="page-content">
             <h5 class="text-center mdl-color-text--primary">HTW-Insta</h5>
             <div id="shared-moments"></div>
           </div>
+<!--template von dilek-->
+
+<div id="shared-moments">
+  <template id="poesie-card-template">
+      <div class="card-center-wrapper">
+        <div class="shared-moment-card mdl-card mdl-shadow--2dp">
+          <div class="mdl-card__title template-title-wrapper" style="background-image:url(/src/images/htw.jpg); background-size: cover; height: 180px">
+            <h2 class="mdl-card__title-text template-title">Spanien im August</h2>
+          </div>
+      
+          <div class="mdl-card__supporting-text" style="text-align: center;">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
+          </svg>
+            <p class="template-location">Spanien</p>
+          </div>
+          <div class="mdl-card__supporting-text template-text">
+            Ein Gedicht aus Spanien. Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla
+          </div>
+          <div class="card-delete-icon">
+          <svg  style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
+          </svg>
+          </div>
+        </div>
+      </div>
+    </template>
+</div>
+</div>
+<!--template-->
+
           <div class="floating-button">
-            <button
-              class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-              id="share-image-button"
-            >
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+              id="share-image-button">
               <i class="material-icons">add</i>
             </button>
           </div>
+
           <div
             id="confirmation-toast"
             aria-live="assertive"
             aria-atomic="true"
             aria-relevant="text"
-            class="mdl-snackbar mdl-js-snackbar"
-          >
+            class="mdl-snackbar mdl-js-snackbar">
             <div class="mdl-snackbar__text"></div>
             <button type="button" class="mdl-snackbar__action"></button>
           </div>
         </main>
       </div>
     </div>
-    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
- <script src ="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+
 
     <script defer src="/src/js/material.min.js"></script>
     <script src="/src/js/idb.js"></script>

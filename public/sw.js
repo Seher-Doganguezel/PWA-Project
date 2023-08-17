@@ -63,7 +63,7 @@ self.addEventListener('fetch', event => {
                 const clonedResponse = res.clone();
                 clearAllData('posts')
                 .then( () => {
-                    return clonedResponse.json();
+                     clonedResponse.json();
                 })
                 .then( data => {
                     for(let key in data)

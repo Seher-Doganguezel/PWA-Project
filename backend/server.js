@@ -1,13 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const uploadRoutes = require('./routes/upload.routes');
 const postRoutes = require('./routes/post.routes');
 require('dotenv').config();
 const cors = require('cors')
-const app = express();
+const app = express(); 
 const PORT = 8000;
 
 app.use(express.json());
 app.use(cors());
+app.use('/upload', uploadRoutes);
 app.use('/posts', postRoutes);
 
 
