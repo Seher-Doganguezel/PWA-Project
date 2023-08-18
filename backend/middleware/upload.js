@@ -8,20 +8,18 @@ const storage = new GridFsStorage({
     file: (req, file) => {
         const match = ["image/png", "image/jpg", "image/jpeg"];
 
-        if(match.indexOf(file.mimetype) === -1)
-        {
-            return `${Date.now()}-sd-${file.originalname}`;
+        if (match.indexOf(file.mimetype) === -1) {
+            const error = new Error('Invalid file type');
+            error.httpStatusCode = 400;
+            return error;
         }
 
-        console.log('store');
+
         return {
-            bucketName: 'posts',
-            filename: `${Date.now()}-sd-${file.originalname}`, 
-            request: req
-        }
+            bucketName: 'uploads',
+            filename: `${Date.now()}-sd-${file.originalname}`
+        };
     }
-})
-
-console.log('store', storage)
+});
 
 module.exports = multer({ storage });

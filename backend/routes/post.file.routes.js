@@ -1,8 +1,8 @@
 //same upload file
-const collectionFiles = connect.collection('posts.files');
+//const collectionFiles = connect.collection('posts.files');
 
 
-function getOnePost(id) {
+/* function getOnePost(id) {
     return new Promise( async(resolve, reject) => {
         try {
             const post = await Post.findOne({ _id: id });
@@ -25,7 +25,7 @@ function getOnePost(id) {
                     let base64file = 'data:' + docs[0].contentType + ';base64,' + fileData.join('');
                     let getPost = new Post({
                         "title": post.title,
-                        "location": post.location, 
+                        "location": post.location,
                         "image_id": base64file,
                         "text": post.text,
                         "_id": post._id
@@ -40,11 +40,11 @@ function getOnePost(id) {
             reject(new Error("Post does not exist!"));
         }
     })
-}
+} */
 
 
 // POST one post
-router.post('/', upload.single('file'), async(req, res) => {
+/* router.post('/', upload.single('file'), async(req, res) => {
     // req.file is the `file` file
     if (req.file === undefined) {
         return res.send({
@@ -63,4 +63,4 @@ router.post('/', upload.single('file'), async(req, res) => {
         // console.log("Returning new post:", newPost);
         return res.send(newPost);
     }
-})
+}) */
