@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/upload');
-
 const mongoose = require('mongoose');
+
 const Grid = require('gridfs-stream');
-let gfs;
 const mongodb = require('mongodb')
+const ObjectId = mongodb.ObjectID; //for delete
+
 
 
 // POST one post
@@ -15,7 +16,9 @@ router.post('/', upload.single('file'), (req, res) => {
     }
 
     const imgUrl = `http://localhost:8000/upload/${req.file.filename}`;
-    res.status(201).send({ url: imgUrl });
+    res.status(201).send({ 
+        url: imgUrl 
+    });
 });
 
 
@@ -23,13 +26,13 @@ let bucket;
 mongoose.connection.once('open', () => {
     const database = mongoose.connection.db;
     gfs = Grid(database, mongoose.mongo);
-    gfs.collection('uploads');
+    //gfs.collection('posts');
     bucket = new mongodb.GridFSBucket(database, {
-        bucketName: 'uploads'
+        bucketName: 'posts'
     });
 });
 
-
+// -------------------Download-------------------------
 router.get('/:filename', async (req, res) => {
     try {
         const filename = req.params.filename;
@@ -43,7 +46,9 @@ router.get('/:filename', async (req, res) => {
     }
 });
 
-const ObjectId = mongodb.ObjectId
+
+// -------------------Delete-------------------------
+
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     try {
@@ -54,6 +59,18 @@ router.delete('/:id', async (req, res) => {
         res.status(404).send({ message: "id " + id + " does not exist" });
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 // postX --> Bilder anhängen
 //POST REPRÄSENTATION

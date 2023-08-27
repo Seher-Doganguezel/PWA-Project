@@ -1,4 +1,4 @@
-const { ObjectId, Number, Date, } = require('mongodb');
+/*const { ObjectId, Number, Date, } = require('mongodb');
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
@@ -10,4 +10,4 @@ const schema = new mongoose.Schema({
    contentType: String,
 })
 
-module.exports = mongoose.model('PostFile', schema);
+module.exports = mongoose.model('PostFile', schema); */

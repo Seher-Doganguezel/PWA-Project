@@ -2,24 +2,35 @@
   z-index: 1001;
   position: fixed;
   width: 100%;
-  min-height: calc(100vh - 56px);  overflow-y: scroll;
+  min-height: calc(100vh - 56px); /* overflow-y: scroll; */
   bottom: 0;
   top: 56px;
   background: white;
   text-align: center;
+  /*visibility: hidden; */
   transform: translateY(100vH);
   transition: transform 0.3s;
-  
+ 
 }
-#create-post video, #create-post canvas {
+
+
+#create-post #player,
+#create-post #canvas {
   width: 512px;
   max-width: 100%;
   display: none;
   margin: auto;
 }
 
+#create-post .map {
+  height: 400px;
+  width: 400px;
+  display: none;
+  margin: 10px auto;
+}
 
-#create-post #pick-image {
+#create-post #pick-image,
+#location-loader {
   display: none;
 }
 
@@ -35,10 +46,11 @@
   max-width: 100%;
   margin: auto;
   display: block;
+  padding-bottom: 24px;
 }
 
 .whiteText {
-  color: white;
+  color: rgb(208, 67, 67);
 }
 
 .floating-button {
@@ -86,3 +98,10 @@
       height: 380px;
   }
 }       
+.mdl-card__supporting-text {
+  padding: 0px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  width:100%;
+  background-color: #FBF4ED;
+}

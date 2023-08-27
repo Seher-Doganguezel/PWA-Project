@@ -1,4 +1,6 @@
 const Post = require("../models/posts");
+const upload = require('../middleware/upload');
+
 
 
 // Get all posts

@@ -2,7 +2,7 @@
 //const collectionFiles = connect.collection('posts.files');
 
 
-/* function getOnePost(id) {
+function getOnePost(id) {
     return new Promise( async(resolve, reject) => {
         try {
             const post = await Post.findOne({ _id: id });
@@ -40,11 +40,11 @@
             reject(new Error("Post does not exist!"));
         }
     })
-} */
+} 
 
 
 // POST one post
-/* router.post('/', upload.single('file'), async(req, res) => {
+ router.post('/', upload.single('file'), async(req, res) => {
     // req.file is the `file` file
     if (req.file === undefined) {
         return res.send({
@@ -63,4 +63,35 @@
         // console.log("Returning new post:", newPost);
         return res.send(newPost);
     }
-}) */
+}) 
+function getAllPosts() {
+    return new Promise( async(resolve, reject) => {
+        const sendAllPosts = [];
+        const allPosts = await Post.find();
+        try {
+            for(const post of allPosts) {
+                console.log('post', post)
+                const onePost = await getOnePost(post._id);
+                sendAllPosts.push(onePost);
+            }
+            console.log('sendAllPosts', sendAllPosts)
+            resolve(sendAllPosts)
+        } catch {
+                reject(new Error("Posts do not exist!"));
+    }
+    });
+}
+// GET all posts
+router.get('/', async(req, res) => {
+
+    getAllPosts()
+    .then( (posts) => {
+        res.send(posts);
+    })
+    .catch( () => {
+        res.status(404);
+        res.send({
+            error: "Post do not exist!"
+        });
+    })
+});
