@@ -2,14 +2,11 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/upload');
 const mongoose = require('mongoose');
-
 const Grid = require('gridfs-stream');
 const mongodb = require('mongodb')
 const ObjectId = mongodb.ObjectID; //for delete
 
-
-
-// POST one post
+//---------------------------Upload-------------------------
 router.post('/', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send({ message: "No file selected" });
@@ -26,7 +23,7 @@ let bucket;
 mongoose.connection.once('open', () => {
     const database = mongoose.connection.db;
     gfs = Grid(database, mongoose.mongo);
-    //gfs.collection('posts');
+    gfs.collection('posts');
     bucket = new mongodb.GridFSBucket(database, {
         bucketName: 'posts'
     });

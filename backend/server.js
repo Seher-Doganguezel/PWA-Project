@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const uploadRoutes = require('./routes/upload.routes');
 const postRoutes = require('./routes/post.routes');
+const subscriptionRoute = require('./routes/subscription.routes');
+
 require('dotenv').config();
 const cors = require('cors')
 const app = express();
@@ -11,6 +13,8 @@ app.use(express.json());
 app.use(cors());
 app.use('/upload', uploadRoutes);
 app.use('/posts', postRoutes);
+app.use('/subscription', subscriptionRoute);
+
 
 // connect to mongoDB
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
