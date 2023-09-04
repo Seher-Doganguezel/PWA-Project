@@ -258,7 +258,7 @@ form.addEventListener('submit', event => {
         alert('Erst Foto aufnehmen!')
         return;
     }
-    if (titleInput.value.trim() === '' || locationInput.value.trim() === '' || txtInput.value.trim() === '') {
+    if (titleInput.value.trim() === '' || locationInput.value.trim() === '') {
         alert('Bitte Titel und Location angeben!')
         return;
     }

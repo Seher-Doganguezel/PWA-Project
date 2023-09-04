@@ -56,24 +56,25 @@ self.addEventListener('fetch', event => {
     if (!(event.request.url.indexOf('http') === 0)) return; // skip the request. if request is not made with http protocol
 
     const url = 'http://localhost:8000/posts';
-    if(event.request.url.indexOf(url) >= 0) {
+    if (event.request.url.indexOf(url) >= 0) {
+        console.log('event.request', event.request)
         event.respondWith(
             fetch(event.request)
-            .then ( res => {
-                const clonedResponse = res.clone();
-                clearAllData('posts')
-                .then( () => {
-                     clonedResponse.json();
-                })
-                .then( data => {
-                    for(let key in data)
-                    {
-                        console.log('writwe data', data[key]);
-                        writeData('posts', data[key]);
+                .then(res => {
+                    if (event.request.method === 'GET') {
+                        const clonedResponse = res.clone();
+                        clearAllData('posts')
+                            .then(() => {
+                                clonedResponse.json()
+                                    .then(data => {
+                                        for (let key in data) {
+                                            writeData('posts', data[key]);
+                                        }
+                                    })
+                            })
                     }
-                });
-                return res;
-            })
+                    return res;
+                })
         )
     } else {
 
@@ -139,3 +140,58 @@ self.addEventListener('sync', event => {
         );
     }
 })
+
+self.addEventListener('notificationclick', event => {
+    let notification = event.notification;
+    let action = event.action;
+
+    console.log(notification);
+
+    if(action === 'confirm') {
+        console.log('confirm was chosen');
+        notification.close();
+    } else {
+        console.log(action);
+        event.waitUntil(
+            clients.matchAll()      // clients sind alle Windows (Browser), fuer die der Service Worker verantwortlich ist
+                .then( clientsArray => {
+                    let client = clientsArray.find( c => {
+                        return c.visibilityState === 'visible';
+                    });
+
+                    if(client !== undefined) {
+                        client.navigate(notification.data.url);
+                                                client.focus();
+                    } else {
+                        client.openWindow(notification.data.url);
+                    }
+                    notification.close();
+                })
+        );
+    }
+});
+
+self.addEventListener('notificationclose', event => {
+    console.log('notification was closed', event);
+});
+
+self.addEventListener('push', event => {
+    console.log('push notification received', event);
+    let data = { title: 'Test', content: 'Fallback message', openUrl: '/'};
+    if(event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    let options = {
+        body: data.content,
+        icon: '/src/images/icons/fiw96x96.png',
+        data: {
+            url: data.openUrl
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
+

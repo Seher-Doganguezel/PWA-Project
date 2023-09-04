@@ -3,6 +3,7 @@
   position: fixed;
   width: 100%;
   min-height: calc(100vh - 56px); /* overflow-y: scroll; */
+  overflow-y: scroll;
   bottom: 0;
   top: 56px;
   background: white;
@@ -23,10 +24,16 @@
 }
 
 #create-post .map {
-  height: 400px;
-  width: 400px;
+  height: 200px;
+  width: 200px;
   display: none;
   margin: 10px auto;
+}
+/* */
+#close-create-post-modal-btn {
+  position: absolute;
+  top: 10px; 
+  right: 10px;
 }
 
 #create-post #pick-image,
@@ -84,7 +91,7 @@
 }
 
 .shared-moment-card .mdl-card__title {
-  height: 250px;
+  height: 400px;
 }
 
 @media (min-height: 600px) {
@@ -104,4 +111,12 @@
   padding-bottom: 16px;
   width:100%;
   background-color: #FBF4ED;
+}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 99;
 }
