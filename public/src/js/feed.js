@@ -4,7 +4,7 @@ let closeCreatePostModalButton = document.querySelector('#close-create-post-moda
 let sharedMomentsArea = document.querySelector('#shared-moments');
 let form = document.querySelector('form');
 let titleInput = document.querySelector('#title');
-let txtInput = document.querySelector('#txt');
+let txtInput = document.querySelector('#text');
 let locationInput = document.querySelector('#location');
 let videoPlayer = document.querySelector('#player');
 let canvasElement = document.querySelector('#canvas');
@@ -227,8 +227,9 @@ function sendDataToBackend() {
     formData.append('file', file);
     formData.append('txt', txtValue);
 
-
-    console.log('formData', formData)
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
 
     fetch('http://localhost:8000/posts', {
         method: 'POST',
@@ -269,12 +270,13 @@ form.addEventListener('submit', event => {
     titleValue = titleInput.value;
     locationValue = locationInput.value;
     txtValue = txtInput.value;
+
     console.log('titleInput', titleValue)
     console.log('locationInput', locationValue)
-    console.log('file', file)
     console.log('txtInput', txtValue)
 
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        console.log("test");
         if (!navigator.onLine) {
             navigator.serviceWorker.ready
                 .then(sw => {
@@ -285,6 +287,7 @@ form.addEventListener('submit', event => {
                         image_id: file,
                         txt: txtValue      // file durch den Foto-Button belegt
                     };
+                    console.log("post",post);
                     writeData('sync-posts', post)
                         .then(() => {
                             return sw.sync.register('sync-new-post');
@@ -298,7 +301,7 @@ form.addEventListener('submit', event => {
         } else {
             sendDataToBackend();
         }
-    } else {
+    } else {  console.log("tes1t");
         sendDataToBackend();
     }
 });
