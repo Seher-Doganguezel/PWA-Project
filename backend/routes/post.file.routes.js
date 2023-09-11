@@ -44,8 +44,9 @@ function getOnePost(id) {
 
 
 // POST one post
- router.post('/', upload.single('file'), async(req, res) => {
-    // req.file is the `file` file
+ /* router.post('/', upload.single('file'), async(req, res) => {
+    // req.file is the `file` file  
+    console.log('req.body', req.body);
     if (req.file === undefined) {
         return res.send({
             "message": "no file selected"
@@ -63,7 +64,7 @@ function getOnePost(id) {
         // console.log("Returning new post:", newPost);
         return res.send(newPost);
     }
-}) 
+})  */
 function getAllPosts() {
     return new Promise( async(resolve, reject) => {
         const sendAllPosts = [];
