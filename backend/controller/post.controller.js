@@ -1,5 +1,6 @@
 const Post = require("../models/posts");
 const upload = require("../middleware/upload"); // If it's not used, you should remove it
+const { ObjectId } = require("mongodb");
 
 // exports.getAllPosts = async (req, res) => {
 //   try {
@@ -33,19 +34,27 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+// Get one post by id
 exports.getPostById = async (req, res) => {
-  console.log("get post by id");
   try {
-    const post = await Post.findById(req.params.id);
-    if (!post) {
-      return res.status(404).send({ error: "Post not found" });
+    const id = req.params.id; // Extract the id from params
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid Post ID" });
     }
-    res.status(200).send(post);
+
+    getOnePost(id)
+      .then((post) => {
+        if (post) {
+          res.status(200).send(post);
+        } else {
+          res.status(404).send({ error: "Post not found" });
+        }
+      })
+      .catch((error) => {
+        res.status(500).send({ error: "Server error: " + error.message });
+      });
   } catch (error) {
-    console.error(
-      `Server error fetching post with id ${req.params.id}:`,
-      error
-    );
     res.status(500).send({ error: "Server error" });
   }
 };
