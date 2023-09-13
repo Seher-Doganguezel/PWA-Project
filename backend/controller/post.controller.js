@@ -34,6 +34,59 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+exports.getPostById = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid Post ID" });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    let fileName = post.image_id;
+
+    collectionFiles.find({ filename: fileName }).toArray(async (err, docs) => {
+      if (err) {
+        return res.status(500).send({ error: "File not found" });
+      }
+
+      collectionChunks
+        .find({ files_id: docs[0]._id })
+        .sort({ n: 1 })
+        .toArray((err, chunks) => {
+          if (err) {
+            return res.status(500).send({ error: "Chunks not found" });
+          }
+
+          const fileData = [];
+          for (let chunk of chunks) {
+            fileData.push(chunk.data.toString("base64"));
+          }
+
+          const base64file =
+            "data:" + docs[0].contentType + ";base64," + fileData.join("");
+
+          const resultPost = {
+            title: post.title,
+            location: post.location,
+            image_id: base64file,
+            text: post.text,
+            _id: post._id,
+          };
+
+          res.status(200).send(resultPost);
+        });
+    });
+  } catch (error) {
+    res.status(500).send({ error: "Server error: " + error.message });
+  }
+};
+
 // Get one post by id
 exports.getPostById = async (req, res) => {
   try {
