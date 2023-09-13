@@ -77,6 +77,36 @@ exports.updatePostById = async (req, res) => {
   }
 };
 
+exports.createPost = async (req, res) => {
+  try {
+    // Extracting fields from the request body
+    const { title, location, txt } = req.body;
+    const image_id = req.file ? req.file.id : null; // Assuming you are storing the file id when uploaded
+
+    // Validate required fields
+    if (!title || !txt) {
+      return res.status(400).send({ error: "Both title and txt are required" });
+    }
+
+    // Create a new Post
+    const newPost = new Post({
+      title,
+      location,
+      image_id,
+      txt,
+    });
+
+    // Save the Post
+    await newPost.save();
+
+    // Send back the saved Post
+    res.status(201).send(newPost);
+  } catch (error) {
+    console.error("Error creating a new post:", error);
+    res.status(500).send({ error: "Failed to create a new post" });
+  }
+};
+
 /*
 function sendNotification() {
     webpush.setVapidDetails('mailto:Seher.Doganguezel@htw-berlin.de', publicVapidKey, privateVapidKey);
