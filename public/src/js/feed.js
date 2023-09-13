@@ -1,41 +1,27 @@
-const DOMSelectors = {
-  shareImageButton: "#share-image-button",
-  createPostArea: "#create-post",
-  closeCreatePostModalButton: "#close-create-post-modal-btn",
-  sharedMomentsArea: "#shared-moments",
-  form: "form",
-  titleInput: "#title",
-  txtInput: "#text",
-  locationInput: "#location",
-  videoPlayer: "#player",
-  canvasElement: "#canvas",
-  captureButton: "#capture-btn",
-  imagePicker: "#image-picker",
-  imagePickerArea: "#pick-image",
-  locationButton: "#location-btn",
-  locationLoader: "#location-loader",
-  mapDiv: ".map",
-};
-
-const state = {
-  fetchedLocation: null,
-  file: null,
-  titleValue: "",
-  locationValue: "",
-  txtValue: "",
-  imageURI: "",
-};
-
-async function fetchLocationName(latitude, longitude) {
-  const nominatimURL = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-  const res = await fetch(nominatimURL);
-  const data = await res.json();
-  return data.display_name;
-}
-
-async function getUserMedia(constraints) {
-  return await navigator.mediaDevices.getUserMedia(constraints);
-}
+let shareImageButton = document.querySelector("#share-image-button");
+let createPostArea = document.querySelector("#create-post");
+let closeCreatePostModalButton = document.querySelector(
+  "#close-create-post-modal-btn"
+);
+let sharedMomentsArea = document.querySelector("#shared-moments");
+let form = document.querySelector("form");
+let titleInput = document.querySelector("#title");
+let txtInput = document.querySelector("#text");
+let locationInput = document.querySelector("#location");
+let videoPlayer = document.querySelector("#player");
+let canvasElement = document.querySelector("#canvas");
+let captureButton = document.querySelector("#capture-btn");
+let imagePicker = document.querySelector("#image-picker");
+let imagePickerArea = document.querySelector("#pick-image");
+let file = null;
+let titleValue = "";
+let locationValue = "";
+let imageURI = "";
+let txtValue = "";
+let locationButton = document.querySelector("#location-btn");
+let locationLoader = document.querySelector("#location-loader");
+let fetchedLocation;
+let mapDiv = document.querySelector(".map");
 
 // Nutzen der Geolocation (automatisches Hinzufügen der Location)
 locationButton.addEventListener("click", (event) => {
@@ -241,15 +227,10 @@ fetch("http://localhost:8000/posts")
     }
   });
 
-async function updateUI() {
-  try {
-    const res = await fetch("http://localhost:8000/posts");
-    const data = await res.json();
-    for (let card of data) {
-      createCard(card);
-    }
-  } catch (err) {
-    console.log("Error updating UI", err);
+// Karte für jeden Datensatz
+function updateUI(data) {
+  for (let card of data) {
+    createCard(card);
   }
 }
 
@@ -285,70 +266,95 @@ function sendDataToBackend() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Dynamically assign DOM selectors to window object for easier reference
-  Object.keys(DOMSelectors).forEach((key) => {
-    window[key] = document.querySelector(DOMSelectors[key]);
-  });
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // nicht absenden und neu laden
 
-  // Handle image picking
-  imagePicker.addEventListener("change", (event) => {
-    state.file = event.target.files[0];
-  });
+  if (file == null) {
+    alert("Erst Foto aufnehmen!");
+    return;
+  }
+  if (titleInput.value.trim() === "" || locationInput.value.trim() === "") {
+    alert("Bitte Titel und Location angeben!");
+    return;
+  }
 
-  // Handle clicking the location button
-  locationButton.addEventListener("click", async () => {
-    if (!("geolocation" in navigator)) {
-      // Geolocation API not supported
-      return;
-    }
+  closeCreatePostModal();
 
-    locationButton.style.display = "none";
-    locationLoader.style.display = "block";
+  titleValue = titleInput.value;
+  locationValue = locationInput.value;
+  txtValue = txtInput.value;
 
-    try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          timeout: 5000,
-        });
+  console.log("titleInput", titleValue);
+  console.log("locationInput", locationValue);
+  console.log("txtInput", txtValue);
+
+  if ("serviceWorker" in navigator && "SyncManager" in window) {
+    console.log("test");
+    if (!navigator.onLine) {
+      navigator.serviceWorker.ready.then((sw) => {
+        let post = {
+          id: new Date().toISOString(),
+          title: titleValue,
+          location: locationValue,
+          image_id: file,
+          txt: txtValue, // file durch den Foto-Button belegt
+        };
+        console.log("post", post);
+        writeData("sync-posts", post)
+          .then(() => {
+            return sw.sync.register("sync-new-post");
+          })
+          .then(() => {
+            let snackbarContainer = new MaterialSnackbar(
+              document.querySelector("#confirmation-toast")
+            );
+            let data = {
+              message: "Eingaben zum Synchronisieren gespeichert!",
+              timeout: 2000,
+            };
+            snackbarContainer.showSnackbar(data);
+          });
       });
-
-      const { latitude, longitude } = position.coords;
-      const locationName = await fetchLocationName(latitude, longitude);
-
-      locationInput.value = locationName;
-      state.fetchedLocation = { latitude, longitude };
-    } catch (err) {
-      console.error("Could not fetch location:", err);
-    } finally {
-      locationButton.style.display = "block";
-      locationLoader.style.display = "none";
+    } else {
+      sendDataToBackend();
     }
+  } else {
+    console.log("tes1t");
+    sendDataToBackend();
+  }
+});
+
+// Foto aufnehmen
+captureButton.addEventListener("click", (event) => {
+  event.preventDefault(); // nicht absenden und neu laden
+  canvasElement.style.display = "block";
+  videoPlayer.style.display = "none";
+  captureButton.style.display = "none";
+  let context = canvasElement.getContext("2d");
+  context.drawImage(
+    videoPlayer,
+    0,
+    0,
+    canvas.width,
+    videoPlayer.videoHeight / (videoPlayer.videoWidth / canvas.width)
+  );
+  videoPlayer.srcObject.getVideoTracks().forEach((track) => {
+    track.stop();
   });
+  imageURI = canvas.toDataURL("image/jpg");
+  // console.log('imageURI', imageURI)       // base64-String des Bildes
 
-  // Handle form submission
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  fetch(imageURI)
+    .then((res) => {
+      return res.blob();
+    })
+    .then((blob) => {
+      file = new File([blob], "myFile.jpg", { type: "image/jpg" });
+      console.log("file", file);
+    });
+});
 
-    // Capture form data into the state object
-    state.titleValue = titleInput.value;
-    state.locationValue = locationInput.value;
-    state.txtValue = txtInput.value;
-    // Assuming that `state.file` and `state.imageURI` are populated elsewhere
-
-    // Now send this data to the backend
-    await sendDataToBackend(state);
-
-    // Clear the form and state
-    form.reset();
-    for (let key in state) {
-      state[key] = null;
-    }
-
-    // Update the UI
-    await updateUI();
-  });
-
-  // Initialize the UI
-  updateUI();
+// Foto hochladen
+imagePicker.addEventListener("change", (event) => {
+  file = event.target.files[0];
 });
