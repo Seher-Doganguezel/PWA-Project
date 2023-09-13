@@ -1,24 +1,35 @@
 const Post = require("../models/posts");
 const upload = require("../middleware/upload"); // If it's not used, you should remove it
 
+// exports.getAllPosts = async (req, res) => {
+//   try {
+//     const allPosts = await Post.find();
+//     const sendAllPosts = await Promise.all(
+//       allPosts.map(async (post) => {
+//         try {
+//           return await getOnePost(post._id);
+//         } catch (err) {
+//           console.error(`Error fetching post with id ${post._id}:`, err);
+//           return null;
+//         }
+//       })
+//     ).filter((post) => post !== null);
+
+//     res.status(200).send(sendAllPosts);
+//   } catch (error) {
+//     console.error("Error fetching all posts:", error);
+//     res.status(500).send({ error: "Failed to fetch posts" });
+//   }
+// };
+
+// Get all posts
 exports.getAllPosts = async (req, res) => {
   try {
-    const allPosts = await Post.find();
-    const sendAllPosts = await Promise.all(
-      allPosts.map(async (post) => {
-        try {
-          return await getOnePost(post._id);
-        } catch (err) {
-          console.error(`Error fetching post with id ${post._id}:`, err);
-          return null;
-        }
-      })
-    ).filter((post) => post !== null);
-
-    res.status(200).send(sendAllPosts);
+    console.log("post get");
+    const posts = await Post.find();
+    res.status(200).send(posts);
   } catch (error) {
-    console.error("Error fetching all posts:", error);
-    res.status(500).send({ error: "Failed to fetch posts" });
+    res.status(500).send({ error: "server error" });
   }
 };
 
