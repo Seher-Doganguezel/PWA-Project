@@ -15,7 +15,7 @@ const storage = new GridFsStorage({
     }
 
     return {
-      bucketName: "posts",
+      bucketName: "uploads",
       filename: `${Date.now()}-sd-${file.originalname}`,
     };
   },

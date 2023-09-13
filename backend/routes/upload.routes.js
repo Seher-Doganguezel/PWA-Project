@@ -5,29 +5,29 @@ const mongoose = require("mongoose");
 const Grid = require("gridfs-stream");
 const mongodb = require("mongodb");
 const ObjectId = mongodb.ObjectID;
-
 let bucket;
 mongoose.connection.once("open", () => {
-  // Initialize GridFS
   const database = mongoose.connection.db;
-  Grid(database, mongoose.mongo);
+  gfs = Grid(database, mongoose.mongo);
+  gfs.collection("uploads");
   bucket = new mongodb.GridFSBucket(database, {
-    bucketName: "posts",
+    bucketName: "uploads",
   });
 });
 
-// Upload file
 router.post("/", upload.single("file"), (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ message: "No file selected" });
+    return res.status(400).send({ message: "No file selected" });
   }
+
   const imgUrl = `http://localhost:8000/upload/${req.file.filename}`;
-  res.status(201).json({ url: imgUrl });
+  res.status(201).send({ url: imgUrl });
 });
 
 // Download file
 router.get("/:filename", async (req, res) => {
   try {
+    console.log("file get");
     const filename = req.params.filename;
     let downloadStream = bucket.openDownloadStreamByName(filename);
     downloadStream.on("data", (data) => res.status(200).write(data));
