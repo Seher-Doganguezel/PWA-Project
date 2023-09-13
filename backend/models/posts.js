@@ -1,12 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const schema = new mongoose.Schema({
-    title: String,
-    
-})
+const PostSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: false,
+  },
+  image_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PostFile",
+  },
+  txt: {
+    type: String,
+    required: true,
+  },
+});
 
-module.exports = mongoose.model('Post', schema);
-
-//location: String,
-  //  image_id: String,
-   // txt: String
+module.exports = mongoose.model("Post", PostSchema);

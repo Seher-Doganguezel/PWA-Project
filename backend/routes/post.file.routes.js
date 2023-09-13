@@ -1,98 +1,101 @@
-//same upload file
-//const collectionFiles = connect.collection('posts.files');
+const express = require("express");
+const router = express.Router();
+const mongoose = require("mongoose");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const crypto = require("crypto");
+const path = require("path");
+const Post = require("../models/Post"); // Your Post model
 
+const conn = mongoose.createConnection(
+  "mongodb://localhost:27017/your_database_name",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
-function getOnePost(id) {
-    return new Promise( async(resolve, reject) => {
-        try {
-            const post = await Post.findOne({ _id: id });
-            console.log('post.image_id', post.image_id);
-            let fileName = post.image_id;
-
-            collectionFiles.find({filename: fileName}).toArray( async(err, docs) => {
-                console.log('docs', docs)
-
-                collectionChunks.find({files_id : docs[0]._id}).sort({n: 1}).toArray( (err, chunks) => {
-
-
-                    const fileData = [];
-                    for(let chunk of chunks)
-                    {
-                        // console.log('chunk._id', chunk._id)
-                        fileData.push(chunk.data.toString('base64'));
-                    }
-
-                    let base64file = 'data:' + docs[0].contentType + ';base64,' + fileData.join('');
-                    let getPost = new Post({
-                        "title": post.title,
-                        "location": post.location,
-                        "image_id": base64file,
-                        "text": post.text,
-                        "_id": post._id
-                    });
-                    //console.log('getPost', getPost)
-                    resolve(getPost)
-                })
-
-            }) // toArray find filename
-
-        } catch {
-            reject(new Error("Post does not exist!"));
-        }
-    })
-} 
-
-
-// POST one post
- /* router.post('/', upload.single('file'), async(req, res) => {
-    // req.file is the `file` file  
-    console.log('req.body', req.body);
-    if (req.file === undefined) {
-        return res.send({
-            "message": "no file selected"
-        });
-    } else {
-        console.log('req.body', req.body);
-        const newPost = new Post({
-            title: req.body.title,
-            location: req.body.location,
-            image_id: req.file.filename,
-            text: req.body.text
-        })
-        await newPost.save();
-        sendNotification();
-        // console.log("Returning new post:", newPost);
-        return res.send(newPost);
-    }
-})  */
-function getAllPosts() {
-    return new Promise( async(resolve, reject) => {
-        const sendAllPosts = [];
-        const allPosts = await Post.find();
-        try {
-            for(const post of allPosts) {
-                console.log('post', post)
-                const onePost = await getOnePost(post._id);
-                sendAllPosts.push(onePost);
-            }
-            console.log('sendAllPosts', sendAllPosts)
-            resolve(sendAllPosts)
-        } catch {
-                reject(new Error("Posts do not exist!"));
-    }
-    });
-}
-// GET all posts
-router.get('/', async(req, res) => {
-
-    getAllPosts()
-    .then( (posts) => {
-        res.send(posts);
-    })
-    .catch( () => {
-        res.status(404);
-        res.send({
-            error: "Post do not exist!"
-        });
-    })
+// Init gfs
+let gfs;
+conn.once("open", () => {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("posts");
 });
+
+// Create storage engine
+const storage = new GridFsStorage({
+  url: "mongodb://localhost:27017/your_database_name",
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: "posts",
+        };
+        resolve(fileInfo);
+      });
+    });
+  },
+});
+
+const upload = multer({ storage });
+
+// Upload a file for a specific post
+router.post("/:id/upload", upload.single("file"), async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    post.file_id = req.file.id;
+    await post.save();
+    res
+      .status(201)
+      .json({ message: "File uploaded successfully", file: req.file });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET a file by filename
+router.get("/:filename", (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    if (!file || file.length === 0) {
+      return res.status(404).json({ message: "No file exists" });
+    }
+
+    // Check if the file is an image
+    if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
+      // Read output to browser
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({ message: "Not an image" });
+    }
+  });
+});
+
+// DELETE a file by filename
+router.delete("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    gfs.remove({ _id: post.file_id, root: "posts" }, (err, gridStore) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      }
+      post.file_id = null;
+      post.save();
+      res.status(200).json({ message: "File deleted successfully" });
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+module.exports = router;

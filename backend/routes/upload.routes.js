@@ -1,87 +1,56 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const upload = require('../middleware/upload');
-const mongoose = require('mongoose');
-const Grid = require('gridfs-stream');
-const mongodb = require('mongodb')
-const ObjectId = mongodb.ObjectID; //for delete
-
-//---------------------------Upload-------------------------
-router.post('/', upload.single('file'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).send({ message: "No file selected" });
-    }
-
-    const imgUrl = `http://localhost:8000/upload/${req.file.filename}`;
-    res.status(201).send({ 
-        url: imgUrl 
-    });
-});
-
+const upload = require("../middleware/upload");
+const mongoose = require("mongoose");
+const Grid = require("gridfs-stream");
+const mongodb = require("mongodb");
+const ObjectId = mongodb.ObjectID;
 
 let bucket;
-mongoose.connection.once('open', () => {
-    const database = mongoose.connection.db;
-    gfs = Grid(database, mongoose.mongo);
-    gfs.collection('posts');
-    bucket = new mongodb.GridFSBucket(database, {
-        bucketName: 'posts'
-    });
+mongoose.connection.once("open", () => {
+  // Initialize GridFS
+  const database = mongoose.connection.db;
+  Grid(database, mongoose.mongo);
+  bucket = new mongodb.GridFSBucket(database, {
+    bucketName: "posts",
+  });
 });
 
-// -------------------Download-------------------------
-router.get('/:filename', async (req, res) => {
-    try {
-        const filename = req.params.filename;
-        let downloadStream = bucket.openDownloadStreamByName(filename);
-        downloadStream.on("data", (data) => res.status(200).write(data));
-        downloadStream.on("error", (err) => res.status(404).send({ message: filename + " does not exist" }));
-        downloadStream.on("end", () => res.end());
-    } catch (error) {
-        console.log('error', error);
-        res.send("not found");
-    }
+// Upload file
+router.post("/", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file selected" });
+  }
+  const imgUrl = `http://localhost:8000/upload/${req.file.filename}`;
+  res.status(201).json({ url: imgUrl });
 });
 
+// Download file
+router.get("/:filename", async (req, res) => {
+  try {
+    const filename = req.params.filename;
+    let downloadStream = bucket.openDownloadStreamByName(filename);
+    downloadStream.on("data", (data) => res.status(200).write(data));
+    downloadStream.on("end", () => res.end());
+    downloadStream.on("error", () =>
+      res.status(404).json({ message: `${filename} does not exist` })
+    );
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
-// -------------------Delete-------------------------
-
-router.delete('/:id', async (req, res) => {
+// Delete file
+router.delete("/:id", async (req, res) => {
+  try {
     const id = req.params.id;
-    try {
-        await bucket.delete(new ObjectId(id));
-        res.status(200).send({ message: "deleted" })
-    } catch (error) {
-        console.log('error', error);
-        res.status(404).send({ message: "id " + id + " does not exist" });
-    }
+    await bucket.delete(new ObjectId(id));
+    res.status(200).json({ message: "File deleted" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(404).json({ message: `ID ${id} does not exist` });
+  }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-// postX --> Bilder anhängen
-//POST REPRÄSENTATION
-/* {
-    postName: "Wie backt man Kuchen"
-    imageID: 1
-}
-FILE REPRÄSENTATION
-{
-    fileId: asdasd
-    id: asdasdas
-    file_name: 1
-} */
-
-
 
 module.exports = router;

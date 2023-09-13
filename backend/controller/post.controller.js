@@ -1,89 +1,80 @@
 const Post = require("../models/posts");
-const upload = require('../middleware/upload');
+const upload = require("../middleware/upload"); // If it's not used, you should remove it
 
-
-
-// Get all posts
 exports.getAllPosts = async (req, res) => {
-    try {
-        console.log("post get")
-        const posts = await Post.find();
-        res.status(200).send(posts);
-    } catch (error) {
-        res.status(500).send({ error: "server error" });
-    }
+  try {
+    const allPosts = await Post.find();
+    const sendAllPosts = await Promise.all(
+      allPosts.map(async (post) => {
+        try {
+          return await getOnePost(post._id);
+        } catch (err) {
+          console.error(`Error fetching post with id ${post._id}:`, err);
+          return null;
+        }
+      })
+    ).filter((post) => post !== null);
+
+    res.status(200).send(sendAllPosts);
+  } catch (error) {
+    console.error("Error fetching all posts:", error);
+    res.status(500).send({ error: "Failed to fetch posts" });
+  }
 };
 
-
-// Get one post by id
 exports.getPostById = async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id);
-        if (!post) {
-            return res.status(404).send({ error: "Post not found" });
-        }
-        res.status(200).send(post);
-    } catch (error) {
-        res.status(500).send({ error: "server error" });
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).send({ error: "Post not found" });
     }
+    res.status(200).send(post);
+  } catch (error) {
+    console.error(
+      `Server error fetching post with id ${req.params.id}:`,
+      error
+    );
+    res.status(500).send({ error: "Server error" });
+  }
 };
 
-// DELETE one post via id
 exports.deletePostById = async (req, res) => {
-    try {
-        const post = await Post.deleteOne({ _id: req.params.id }); 
-        console.log('post', post);
-
-        if (post.deletedCount === 1) {
-            res.status(204).send({ message: "Deleted" });
-        } else {
-            res.status(404).send({ error: "Post does not exist!" });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: "Something went wrong" });
+  try {
+    const post = await Post.deleteOne({ _id: req.params.id });
+    if (post.deletedCount === 1) {
+      res.status(204).send({ message: "Deleted" });
+    } else {
+      res.status(404).send({ error: "Post does not exist!" });
     }
+  } catch (error) {
+    console.error(`Deletion error for post with id ${req.params.id}:`, error);
+    res.status(500).send({ error: "Something went wrong during deletion" });
+  }
 };
 
-// Post-Create new post
-exports.createPost = async (req, res) => {
-    console.log("body ",req.body);
-   /*  try {
-        const newPost = new Post(req.body);
-        await newPost.save();
-        res.status(201).send(newPost);
-    } catch (error) {
-        res.status(500).send({ error: "Failed to create post" });
-    } */
-};
-
-  // Patch-Update one post via id
 exports.updatePostById = async (req, res) => {
- try { 
-     const post = await Post.findOne({ _id: req.params.id  });
+  try {
+    const updateObject = {};
+    ["title", "location", "image_id", "txt"].forEach((field) => {
+      if (req.body[field]) {
+        updateObject[field] = req.body[field];
+      }
+    });
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: req.params.id },
+      updateObject,
+      { new: true }
+    );
 
-  if (req.body.title) {
-      post.title = req.body.title
-  }
-
-  if (req.body.location) {
-      post.location = req.body.location
-  }
-
-  if (req.body.image_id) {
-      post.image_id = req.body.image_id
-  }
-
-  if (req.body.txt) {
-    post.txt = req.body.txt
-  }
-
-    await post.save();            // Speichern der aktualisierten Daten im Mongoose-Modell
-    res.send(post);
-    } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: "Something went wrong" });
+    if (!updatedPost) {
+      return res.status(404).send({ error: "Post not found" });
     }
+
+    res.send(updatedPost);
+  } catch (error) {
+    console.error(`Update error for post with id ${req.params.id}:`, error);
+    res.status(500).send({ error: "Something went wrong during update" });
+  }
 };
 
 /*
