@@ -34,6 +34,7 @@ exports.getAllPosts = async (req, res) => {
 };
 
 exports.getPostById = async (req, res) => {
+  console.log("get post by id");
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
