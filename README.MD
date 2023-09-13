@@ -1,53 +1,52 @@
-# Progressive Web Apps - Aktuelle Trends der IKT 2022
+# InstaCat
 
-Dieses Projekt enthält das Grundgerüst einer Webanwendung. Auf diesem Grundgerüst bauen wir auf und fügen sukzessive *progressive* Funktionalitäten hinzu, so dass am Ende eine *Progressive Web Application* entsteht. 
+## Table of Contents
+1. [General Info]
+2. [Technologies]
+3. [Installation]
+4. [User Guidebook]
 
-## Installation
+### General Info
+***
+Die Progressive Web Application InstaCat ist im Rahmen des Moduls "Aktuelle Trends der IKT" des Studiengangs Informatik und Wirtschaft der HTW Berlin entstanden und beruht auf zur Verfügung gestellten Code.
 
-- Zum Ausführen des Projektes wird [Node.js](https://nodejs.org) verendet. Sie müssen es auf Ihren Rechner installieren. 
+### Technologies
+***
+* MongoDB
+* Express.js
+* Node.js
 
-- In der Wahl Ihrer IDE sind Sie völlig frei. Empfehlungen finden Sie unter [https://freiheit.f4.htw-berlin.de/ikt/tools/#integrated-development-environment-ide](https://freiheit.f4.htw-berlin.de/ikt/tools/#integrated-development-environment-ide)
+### Installation
+***
+#### Backend
+##### start the nodejs server for development
+```
+$ cd backend
+$ npm i
+$ npm run watch
+```
+##### start the nodejs server to expose the Api
+```
+$ cd backend
+$ npm i
+$ npm start
+```
 
-- Zum Starten des Projektes wechseln Sie im Terminal (Terminal Ihres Rechners oder das Terminal in der IDE) in den Projektordner (`cd IKT-PWA-01`) und führen dort 
+#### Frontend
+##### start the frontend
+```
+$ cd frontend
+$ npm i
+$ ng serve
+```
+##### Stop the server
+```
+$ press ctrl+c
+```
+***
+## User Guidebook
 
-	`npm install` 
-
-	aus (es genügt auch `npm i`). Damit werden alle erforderlichen Abhängigkeiten installiert. Es entsteht der `node_modules`-Ordner. 
-
-- Nach erfolgreicher Installation der Abhängigkeiten, geben Sie  
-
-	`npm start` 
-
-	ein, um Ihr Projekt auszuführen (Es wird der `http-server` mit der Option `-c-1` gestartet. Diese Option disabled Caching). Klicken Sie danach auf [localhost:8080](http://localhost:8080) oder geben Sie die URL direkt in Ihren Browser ein.
-
-- Sollten Sie Änderungen an der IMplementierung vornehmen und diese ausprobieren wollen, müssen Sie den Server zunächst wieder stoppen:
-
-	`Ctrl-C`
-
-	und geben dann erneut 
-
-	`npm start` 
-
-	ein. 
-
-## Anpassungen
-
-Wir verwenden [Material Design Lite](https://getmdl.io/) für das Design unserer Anwendung. Sie können natürlich auch andere CSS-Frameworks verwenden. Sollte Ihnen die aktuelle Farbkombination aus `blue-grey` und `red` nicht zusagen, können Sie in den `index.html`-Datein (im `public`- und im `public/help`-Ordner auch eine andere Kombination auswählen (siehe
-
-`href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css"`
-
-Andere Farbkombinationen finden Sie [hier](https://getmdl.io/customize/#cdn-code). Es genügt auch, die entsprechenden Farben in den Dateinamen einzutragen 
-
-`material.{primary}-{accent}.min.css` 
-
-(z.B. `material.indigo-pink.min.css`).
-
---
-
-Sie können natürlich auch ein anderes Bild als das HTW-Bild einbinden. Beachten Sie dabei nur, dass wir mithilfe responsiven Verhaltens drei verschiedene Bilder davon benötigen, idealerweise mit den Pixel-Maßen `1200 x 457` (`*-lg.jpg`), `900 x 343` (`*.jpg`) und `480 x 183` (`*-sm.jpg`). Siehe dann die `public/index.html`.
-
---
-
-Binden Sie ruhig Ihr eigenes `favicon.ico` in den Projektordner ein. Erstellen können Sie sich ein solches `favicon` z.B. [hier](https://favicon.io/) oder [hier](https://www.ionos.de/tools/favicon-generator). Macht Spaß und gibt allen Ihren Webanwendungen eine persönliche Note ;-).
-
- 
+Die PWA InstaCat dient der Ergänzung der im Modul "Web-Technologien" entwickelten Webanwendung "CatJournal". Mittels der PWA sollen Fotos der Katzen aufgenommen und hochgeladen werden können.  
+Hierzu ist eine Kameraeinbindung erfolgt und der eigene Standort kann abgerufen werden, um einfacher die Location des aufgenommenen Fotos zu verwenden.  
+Über den `+` Button kann ein neuer Eintrag erfolgen. Hier kann dann ein Titel vergeben werden und der Standort eingegeben, oder über die Leolocation bestimmt werden. Zudem besteht die Auswahl zwischen einem Foto aufnehmen und ein bestehendes Bild vom Smartphone oder Rechner hochladen.  
+Mittels Push-Notifications kann darüber informiert werden, wenn ein neuer Eintrag erfolgt ist. Die PWA ist zudem installierbar und auch teilweise offline nutzbar.
