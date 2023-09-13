@@ -9,7 +9,7 @@ const path = require("path");
 const Post = require("../models/Post"); // Your Post model
 
 const conn = mongoose.createConnection(
-  "mongodb://localhost:27017/your_database_name",
+  "mongodb://localhost:27017/test",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -25,7 +25,7 @@ conn.once("open", () => {
 
 // Create storage engine
 const storage = new GridFsStorage({
-  url: "mongodb://localhost:27017/your_database_name",
+  url: "mongodb://localhost:27017/test",
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {

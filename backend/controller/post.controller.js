@@ -129,7 +129,7 @@ exports.deletePostById = async (req, res) => {
 exports.updatePostById = async (req, res) => {
   try {
     const updateObject = {};
-    ["title", "location", "image_id", "txt"].forEach((field) => {
+    ["title", "location", "image_id", "text"].forEach((field) => {
       if (req.body[field]) {
         updateObject[field] = req.body[field];
       }
@@ -154,12 +154,12 @@ exports.updatePostById = async (req, res) => {
 exports.createPost = async (req, res) => {
   try {
     // Extracting fields from the request body
-    const { title, location, txt } = req.body;
+    const { title, location, text } = req.body;
     const image_id = req.file ? req.file.id : null; // Assuming you are storing the file id when uploaded
 
     // Validate required fields
-    if (!title || !txt) {
-      return res.status(400).send({ error: "Both title and txt are required" });
+    if (!title || !text) {
+      return res.status(400).send({ error: "Both title and text are required" });
     }
 
     // Create a new Post
@@ -167,7 +167,7 @@ exports.createPost = async (req, res) => {
       title,
       location,
       image_id,
-      txt,
+      text,
     });
 
     // Save the Post

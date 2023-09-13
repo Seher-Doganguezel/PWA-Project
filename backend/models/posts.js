@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   location: {
     type: String,
@@ -13,9 +13,9 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "PostFile",
   },
-  txt: {
+  text: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
