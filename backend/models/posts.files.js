@@ -1,26 +1,13 @@
+const { ObjectId, Number, Date } = require("mongodb");
 const mongoose = require("mongoose");
 
-const PostFileSchema = new mongoose.Schema({
-  length: {
-    type: Number,
-    required: true,
-  },
-  chunkSize: {
-    type: Number,
-    required: true,
-  },
-  uploadDate: {
-    type: Date,
-    default: Date.now,
-  },
-  fileName: {
-    type: String,
-    required: true,
-  },
-  contentType: {
-    type: String,
-    required: true,
-  },
+const schema = new mongoose.Schema({
+  _id: ObjectId,
+  length: Number,
+  chunkSize: Number,
+  uploadDate: Date,
+  fileName: String,
+  contentType: String,
 });
 
-module.exports = mongoose.model("PostFile", PostFileSchema);
+module.exports = mongoose.model("PostFile", schema);
