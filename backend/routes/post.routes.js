@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controller/post.controller");
 const upload = require("../middleware/upload");
-const errorHandler = require("../middleware/errorHandler"); // Assuming you move this function to its own middleware file
-const notificationMiddleware = require("../middleware/notification"); // Separated notification logic
+const notificationMiddleware = require("../middleware/notification");
+const { errorHandler } = require("../middleware/errorHandler");
 
 const webpush = require("web-push");
+
+console.log("Type of errorHandler:", typeof errorHandler); // DEBUGGEN
 
 function sendNotification() {
   webpush.setVapidDetails(
@@ -26,25 +28,15 @@ function sendNotification() {
 }
 
 // CRUD routes for Post
-
-// GET all posts
 router.get("/", postController.getAllPosts);
-
-// Create a new post
 router.post(
   "/",
   upload.single("file"),
   postController.createPost,
   notificationMiddleware.sendNotification
 );
-
-// GET a post by ID
 router.get("/:id", postController.getPostById);
-
-// DELETE a post by ID
 router.delete("/:id", postController.deletePostById);
-
-// UPDATE a post by ID
 router.patch("/:id", postController.updatePostById);
 
 // Error Handler - Place this at the end of the routes
