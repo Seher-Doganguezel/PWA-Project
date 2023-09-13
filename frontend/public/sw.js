@@ -13,7 +13,7 @@ const STATIC_FILES = [
     '/src/js/idb.js',
     '/src/css/app.css',
     '/src/css/feed.css',
-    '/src/images/InstaCat.png.jpg',
+    '/src/images/landing-pic.jpg',
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
     'https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css'

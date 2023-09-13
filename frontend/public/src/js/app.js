@@ -16,7 +16,7 @@ function displayConfirmNotification() {
         let options = {
             body: 'You successfully subscribed to our Notification service!',
             icon: '/src/images/icons/fiw96x96.png',
-            image: '/src/images/InstaCat-sm.png',
+            image: '/src/images/landing-pic.jpg',
             lang: 'de-DE',
             vibrate: [100, 50, 200],
             badge: '/src/images/icons/fiw96x96.png',

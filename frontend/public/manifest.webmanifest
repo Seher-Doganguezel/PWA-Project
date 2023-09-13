@@ -1,6 +1,6 @@
 {
-    "name": "InstaCat",
-    "short_name": "InstaCat",
+    "name": "TigerMosquitoApp",
+    "short_name": "TigerApp",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#76B900",

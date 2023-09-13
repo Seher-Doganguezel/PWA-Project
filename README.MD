@@ -1,4 +1,4 @@
-# InstaCat
+
 
 ## Table of Contents
 1. [General Info]
@@ -8,7 +8,7 @@
 
 ### General Info
 ***
-Die Progressive Web Application InstaCat ist im Rahmen des Moduls "Aktuelle Trends der IKT" des Studiengangs Informatik und Wirtschaft der HTW Berlin entstanden und beruht auf zur Verfügung gestellten Code.
+Die Progressive Web Application ist im Rahmen des Moduls "Aktuelle Trends der IKT" des Studiengangs Informatik und Wirtschaft der HTW Berlin entwickelt worden.
 
 ### Technologies
 ***
@@ -37,7 +37,7 @@ $ npm start
 ```
 $ cd frontend
 $ npm i
-$ ng serve
+
 ```
 ##### Stop the server
 ```
@@ -46,7 +46,33 @@ $ press ctrl+c
 ***
 ## User Guidebook
 
-Die PWA InstaCat dient der Ergänzung der im Modul "Web-Technologien" entwickelten Webanwendung "CatJournal". Mittels der PWA sollen Fotos der Katzen aufgenommen und hochgeladen werden können.  
-Hierzu ist eine Kameraeinbindung erfolgt und der eigene Standort kann abgerufen werden, um einfacher die Location des aufgenommenen Fotos zu verwenden.  
-Über den `+` Button kann ein neuer Eintrag erfolgen. Hier kann dann ein Titel vergeben werden und der Standort eingegeben, oder über die Leolocation bestimmt werden. Zudem besteht die Auswahl zwischen einem Foto aufnehmen und ein bestehendes Bild vom Smartphone oder Rechner hochladen.  
-Mittels Push-Notifications kann darüber informiert werden, wenn ein neuer Eintrag erfolgt ist. Die PWA ist zudem installierbar und auch teilweise offline nutzbar.
+# TigerMosquitoTracker App
+
+## Über die App
+
+Die TigerMosquitoTracker App dient dazu, die Verbreitung der Tigermücke zu überwachen und einzudämmen. Nutzer können Sichtungen von Tigermücken melden und auf unserer Webseite posten, um zur Sammlung wertvoller Daten beizutragen und so gemeinsam die Ausbreitung zu kontrollieren.
+
+## Funktionen
+
+- **Melden von Sichtungen**: Nutzer können Sichtungen von Tigermücken schnell und einfach über die App melden.
+- **Kartendarstellung**: Alle gemeldeten Sichtungen werden auf einer Karte dargestellt, um ein klares Bild der aktuellen Verbreitung zu geben.
+- **Community-Engagement**: Nutzer können ihre Meldungen auf sozialen Medien teilen und so zur Bewusstseinsbildung beitragen.
+- **Informationsressourcen**: Die App bietet wertvolle Informationen zur Tigermücke, inklusive Tipps zur Vermeidung von Stichen und zur Mückenkontrolle.
+- **Benachrichtigungen**: Nutzer können Benachrichtigungen erhalten, wenn neue Meldungen in ihrer Nähe eingehen.
+
+## Wie man die App verwendet
+
+1. **Download und Installation**: Laden Sie die App aus dem entsprechenden App-Store herunter und installieren Sie sie auf Ihrem Gerät.
+2. **Registrierung**: Erstellen Sie ein Konto, um Meldungen abzugeben und die vollständigen Funktionen der App nutzen zu können.
+3. **Melden einer Sichtung**: Wenn Sie eine Tigermücke sehen, öffnen Sie die App, und folgen Sie den Anweisungen, um eine Meldung abzugeben.
+4. **Karte**: Überprüfen Sie die Karte regelmäßig, um auf dem neuesten Stand über die Verbreitung in Ihrer Umgebung zu bleiben.
+
+## Für Entwickler
+
+Wenn Sie ein Entwickler sind und zur Entwicklung dieser App beitragen möchten, finden Sie den Code und die Anweisungen zur Einrichtung der Entwicklungsumgebung im [GitHub Repository](https://github.com/IhrGitHubLink).
+
+## Support und Feedback
+
+Für Support und Feedback können Sie uns über die in der App angegebene Kontaktinformation erreichen.
+
+### Beteiligen Sie sich und helfen Sie mit, die Verbreitung der Tigermücke zu kontrollieren!

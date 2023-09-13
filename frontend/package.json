@@ -1,7 +1,7 @@
 {
-  "name": "instacat",
+  "name": "TigerMosquitoApp",
   "version": "1.0.0",
-  "description": "insta cat",
+  "description": "TigerMosquitoApp",
   "main": "index.js",
   "scripts": {
     "start": "http-server -c-1"
@@ -15,7 +15,7 @@
     "htw",
     "fiw"
   ],
-  "author": "Franziska Pahlke",
+  "author": "Seher Dogangüzel",
   "license": "ISC",
   "devDependencies": {
     "http-server": "^14.1.0"
