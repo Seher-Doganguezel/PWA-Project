@@ -6,7 +6,7 @@
     overflow-y: scroll;
     bottom: 0;
     top: 56px;
-    background: white;
+    background: rgb(237, 250, 255);
     text-align: center;
     /* visibility: hidden; */
     transform: translateY(100vH);
@@ -102,5 +102,5 @@
     padding-top: 16px;
     padding-bottom: 16px;
     width:100%;
-    background-color: #FBF4ED;
+    background-color: #c1e6f3;
 }
