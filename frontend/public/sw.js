@@ -16,7 +16,7 @@ const STATIC_FILES = [
     '/src/images/landing-pic.jpg',
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
-    'https://code.getmdl.io/1.3.0/material.cyan-deep_orange.min.css'
+    'https://code.getmdl.io/1.3.0/material.grey-blue.min.css'
 ]
 
 self.addEventListener('install', event => {

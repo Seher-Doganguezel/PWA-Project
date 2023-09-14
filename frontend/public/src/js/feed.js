@@ -175,7 +175,7 @@ function createCard(card) {
     cardTitle.style.backgroundSize = 'contain';
     cardTitle.style.backgroundRepeat = 'no-repeat';
     cardTitle.style.backgroundPosition = 'center';
-    cardTitle.style.backgroundColor = '#c8edfa'
+    cardTitle.style.backgroundColor = '#c8edfa';
 
     //----------------New---------------------
     
@@ -183,6 +183,7 @@ function createCard(card) {
     cardWrapper.appendChild(cardTitle);
     let cardTitleTextElement = document.createElement('div');
     cardTitleTextElement.className = 'mdl-card__title-text';
+    cardTitleTextElement.style.background = '#c8edfa';
     cardTitleTextElement.textContent = card.title;
     cardTitleTextElement.classList.add('blackText');
     cardTitleTextElement.style.alignSelf = 'center';
@@ -192,6 +193,7 @@ function createCard(card) {
     cardSupportingText.textContent = card.location;
     cardSupportingText.style.textAlign = 'center';
     cardWrapper.appendChild(cardSupportingText);
+
     componentHandler.upgradeElement(cardWrapper);
     sharedMomentsArea.appendChild(cardWrapper);
 }
@@ -332,3 +334,8 @@ captureButton.addEventListener('click', event => {
 imagePicker.addEventListener('change', event => {
     file = event.target.files[0];
 });
+
+
+  
+  
+  
