@@ -69,10 +69,10 @@ Die TigerMosquitoTracker App dient dazu, die Verbreitung der Tigermücke zu übe
 
 ## Für Entwickler
 
-Wenn Sie ein Entwickler sind und zur Entwicklung dieser App beitragen möchten, finden Sie den Code und die Anweisungen zur Einrichtung der Entwicklungsumgebung im [GitHub Repository](https://github.com/IhrGitHubLink).
+Wenn Sie ein Entwickler sind und zur Entwicklung dieser App beitragen möchten, finden Sie den Code und die Anweisungen zur Einrichtung der Entwicklungsumgebung im [GitHub Repository].
 
 ## Support und Feedback
 
-Für Support und Feedback können Sie uns über die in der App angegebene Kontaktinformation erreichen.
+Für Support und Feedback können Sie das Amt Berlinüber die in der App angegebene Kontaktinformation erreichen.
 
 ### Beteiligen Sie sich und helfen Sie mit, die Verbreitung der Tigermücke zu kontrollieren!
