@@ -229,7 +229,7 @@ function sendDataToBackend() {
     formData.append('title', titleValue);
     formData.append('location', locationValue);
     formData.append('file', file);
-    formData.append('text', text)
+    formData.append('text', textValue)
 
     console.log('formData', formData)
 
@@ -246,7 +246,8 @@ function sendDataToBackend() {
             const newPost = {
                 title: data.title,
                 location: data.location,
-                image_id: imageURI
+                image_id: imageURI,
+               
             }
             updateUI([newPost]);
         });
@@ -269,7 +270,7 @@ form.addEventListener('submit', event => {
 
     titleValue = titleInput.value;
     locationValue = locationInput.value;
-    textValue = textInput.value;
+   
     console.log('titleInput', titleValue)
     console.log('locationInput', locationValue)
     console.log('file', file)
@@ -283,7 +284,7 @@ form.addEventListener('submit', event => {
                         title: titleValue,
                         location: locationValue,
                         image_id: file,
-                        text: textValue      
+                           
                     };
                     writeData('sync-posts', post)
                         .then(() => {

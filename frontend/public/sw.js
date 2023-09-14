@@ -108,7 +108,7 @@ self.addEventListener('sync', event => {
                         formData.append('title', data.title);
                         formData.append('location', data.location);
                         formData.append('file', data.image_id);
-                        formData.append('text', data.text);
+                        
 
 
                         console.log('formData', formData)

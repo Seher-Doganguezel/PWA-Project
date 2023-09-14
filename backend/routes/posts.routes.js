@@ -44,7 +44,7 @@ router.post('/', upload.single('file'), async(req, res) => {
             title: req.body.title,
             location: req.body.location,
             image_id: req.file.filename,
-            text: req.body.text
+           
         })
         await newPost.save();
         sendNotification();
@@ -82,7 +82,7 @@ function getOnePost(id) {
                         "title": post.title,
                         "location": post.location, 
                         "image_id": base64file,
-                        "text": post.text
+                        
                     });
 
                     resolve(getPost)
