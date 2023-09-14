@@ -5,6 +5,8 @@ let sharedMomentsArea = document.querySelector('#shared-moments');
 let form = document.querySelector('form');
 let titleInput = document.querySelector('#title');
 let locationInput = document.querySelector('#location');
+let textInput = document.querySelector('#text');
+
 let videoPlayer = document.querySelector('#player');
 let canvasElement = document.querySelector('#canvas');
 let captureButton = document.querySelector('#capture-btn');
@@ -14,6 +16,7 @@ let file = null;
 let titleValue = '';
 let locationValue = '';
 let imageURI = '';
+let textValue= '';
 let locationButton = document.querySelector('#location-btn');
 let locationLoader = document.querySelector('#location-loader');
 let fetchedLocation;
@@ -172,8 +175,11 @@ function createCard(card) {
     cardTitle.style.backgroundSize = 'contain';
     cardTitle.style.backgroundRepeat = 'no-repeat';
     cardTitle.style.backgroundPosition = 'center';
-    cardTitle.style.backgroundColor = '#FBF4ED'
+    cardTitle.style.backgroundColor = '#c8edfa'
 
+    //----------------New---------------------
+    
+    //----------------New---------------------
     cardWrapper.appendChild(cardTitle);
     let cardTitleTextElement = document.createElement('div');
     cardTitleTextElement.className = 'mdl-card__title-text';
@@ -217,12 +223,13 @@ function updateUI(data) {
     }
 }
 
-// Daten an das Backend senden
+// Daten an  Backend senden
 function sendDataToBackend() {
     const formData = new FormData();
     formData.append('title', titleValue);
     formData.append('location', locationValue);
     formData.append('file', file);
+    formData.append('text', text)
 
     console.log('formData', formData)
 
@@ -258,11 +265,11 @@ form.addEventListener('submit', event => {
         return;
     }
 
-
     closeCreatePostModal();
 
     titleValue = titleInput.value;
     locationValue = locationInput.value;
+    textValue = textInput.value;
     console.log('titleInput', titleValue)
     console.log('locationInput', locationValue)
     console.log('file', file)
@@ -275,7 +282,8 @@ form.addEventListener('submit', event => {
                         id: new Date().toISOString(),
                         title: titleValue,
                         location: locationValue,
-                        image_id: file      // file durch den Foto-Button belegt
+                        image_id: file,
+                        text: textValue      
                     };
                     writeData('sync-posts', post)
                         .then(() => {
@@ -295,7 +303,7 @@ form.addEventListener('submit', event => {
     }
 });
 
-// Foto aufnehmen
+// Foto aufnahme
 captureButton.addEventListener('click', event => {
     event.preventDefault(); // nicht absenden und neu laden
     canvasElement.style.display = 'block';
@@ -307,7 +315,7 @@ captureButton.addEventListener('click', event => {
         track.stop();
     })
     imageURI = canvas.toDataURL("image/jpg");
-    // console.log('imageURI', imageURI)       // base64-String des Bildes
+   
 
     fetch(imageURI)
         .then(res => {

@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="/src/css/feed.css" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet"href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css"/>
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-deep_orange.min.css" />
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/css/ol.css" type="text/css">
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/build/ol.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@
             <nav class="mdl-navigation mdl-layout--large-screen-only">
               <a class="mdl-navigation__link" href="/">Bilder</a>
               <a class="mdl-navigation__link" href="/map">Karte</a>
-              <a class="mdl-navigation__link" href="/help">Konzeptidee</a>
+              <a class="mdl-navigation__link" href="/help">Idee</a>
 
         
               <div class="drawer-option">
@@ -50,7 +50,7 @@
           <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="/">Bilder</a>
             <a class="mdl-navigation__link" href="/map">Karte</a>
-            <a class="mdl-navigation__link" href="/help">Konzeptidee</a>
+            <a class="mdl-navigation__link" href="/help">Idee</a>
             <div class="drawer-option">
               <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent">
                 Benachrichtigungen Ein
@@ -73,9 +73,9 @@
                     <input type="file" accept="image/*" id="image-picker">
                 </div>
 
-              <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="title" />
-                <label class="mdl-textfield__label" for="title" name="title">Titel</label>
+              <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label create-post-title-background">
+                  <input class="mdl-textfield__input" type="text" id="title" />
+                  <label class="mdl-textfield__label" for="title" name="title">Titel</label>
               </div>
 
               <div
@@ -95,6 +95,7 @@
 
             <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <input class="mdl-textfield__input" type="text" id="text">
+    
               <label class="mdl-textfield__label" for="text" name="title">Text</label>
             </div>
 
@@ -153,7 +154,7 @@
     <script src="/src/js/feed.js"></script>
   
 
-<!--- im CSS hinterlegt
+
   <style>
     #myBtn {
       display: none;
@@ -162,7 +163,9 @@
       left: 20px;
       z-index: 99;
     }
-  </style> -->
+  </style> 
+
+  
 
 <!-- FAB Button -->
 <button onclick="topFunction()" id="myBtn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
@@ -177,18 +180,24 @@
   
   window.onscroll = function() {scrollFunction()};
 
-  function scrollFunction() {
-    if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10) {
-      mybutton.style.display = "block";
-    } else {
-      mybutton.style.display = "none";
-    }
-  }
 
   function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+  function scrollFunction() {
+  console.log("Scrolling");  
+  if (document.body.scrollTop > 2 || document.documentElement.scrollTop > 2) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
   }
+}
+
+function topFunction() {
+  console.log("Top Function called");  
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 </script>
 </body>
 </html>

@@ -15,16 +15,16 @@ function displayConfirmNotification() {
     if ('serviceWorker' in navigator) {
         let options = {
             body: 'You successfully subscribed to our Notification service!',
-            icon: '/src/images/icons/fiw96x96.png',
+            icon: '/src/images/icons/favicon-96x96.png',
             image: '/src/images/landing-pic.jpg',
             lang: 'de-DE',
             vibrate: [100, 50, 200],
-            badge: '/src/images/icons/fiw96x96.png',
+            badge: '/src/images/icons/favicon-96x96.png',
             tag: 'confirm-notification',
             renotify: true,
             actions: [
-                { action: 'confirm', title: 'Ok', icon: '/src/images/icons/fiw96x96.png' },
-                { action: 'cancel', title: 'Cancel', icon: '/src/images/icons/fiw96x96.png' },
+                { action: 'confirm', title: 'Ok', icon: '/src/images/icons/favicon-96x96.png' },
+                { action: 'cancel', title: 'Cancel', icon: '/src/images/icons/favicon-96x96.png' },
             ]
         };
 

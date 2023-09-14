@@ -16,7 +16,7 @@ const STATIC_FILES = [
     '/src/images/landing-pic.jpg',
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
-    'https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css'
+    'https://code.getmdl.io/1.3.0/material.cyan-deep_orange.min.css'
 ]
 
 self.addEventListener('install', event => {
@@ -108,6 +108,8 @@ self.addEventListener('sync', event => {
                         formData.append('title', data.title);
                         formData.append('location', data.location);
                         formData.append('file', data.image_id);
+                        formData.append('text', data.text);
+
 
                         console.log('formData', formData)
 
@@ -173,7 +175,7 @@ self.addEventListener('push', event => {
 
     let options = {
         body: data.content,
-        icon: '/src/images/icons/fiw96x96.png',
+        icon: '/src/images/icons/android-icon96x96.png',
         data: {
             url: data.openUrl
         }
